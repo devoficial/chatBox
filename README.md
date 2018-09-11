@@ -13,3 +13,6 @@
 - "/" indexpage
 - "/family" family chat box
 - "/friends" friends chat box
+
+
+[ ![Codeship Status for devoficial/chatBox](https://app.codeship.com/projects/427bed10-9847-0136-1935-7202d5d80573/status?branch=master)](https://app.codeship.com/projects/305219)
