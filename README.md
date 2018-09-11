@@ -9,3 +9,7 @@
     npm i
     npm start
 ```
+# Routes
+--- "/" indexpage
+--- "/family" family chat box
+--- "/friends" friends chat box
