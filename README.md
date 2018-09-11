@@ -10,6 +10,6 @@
     npm start
 ```
 # Routes
---- "/" indexpage
---- "/family" family chat box
---- "/friends" friends chat box
+- "/" indexpage
+- "/family" family chat box
+- "/friends" friends chat box
