@@ -5,25 +5,76 @@ const server = http.Server(app);
 const PORT = 3000;
 // settingup socket.io
 const io = require('socket.io')(server);
-// serving static file
 app.use(express.static('public'));
-
-
-// server "/" get the index.html file
+// Index page
 app.get('/', (req, res) => {
-	res.sendFile('index.html');
+	res.sendFile(__dirname + '/public/index.html');
+});
+// server "/" get the index.html file
+app.get('/friends', (req, res) => {
+	res.sendFile(__dirname + '/public/friends.html');
 });
 
-// Socket event listener
-io.on('connection',(socket) => {
-	console.log('A user is connected');
+app.get('/family', (req, res) => {
+	res.sendFile(__dirname + '/public/family.html');
+});
+
+// Friends namespace
+const chat = io.of('/chat');
+chat.on('connection',(socket) => {
 	socket.emit('message',{
 		chat:'chatbox'
 	});
-	socket.on('chat',(data) => {
-		console.log(data);
+	socket.emit('welcome',{
+		data:'welcome to friends chat box'
+	});
+
+
+	// Adding the messages
+	socket.on('join',(data) => {
+		socket.join(data.room);
+		chat.in(data.room).emit('msg',`
+			New user joins the ${data.room} room!
+		`);
+	});
+
+	socket.on('msg',(data) => {
+		chat.in(data.room).emit('msg',data.msg);
+	});
+
+	socket.on('disconnect',() => {
+		chat.emit('msg','user diconnected');
 	});
 });
+
+// Family namespace
+const chatf = io.of('/chatf');
+chatf.on('connection',(socket) => {
+	socket.emit('message',{
+		chat:'chatbox'
+	});
+	socket.emit('welcome',{
+		data:'welcome to family chat box'
+	});
+
+
+	// Adding the messages
+	socket.on('join',(data) => {
+		socket.join(data.room);
+		chatf.in(data.room).emit('msg',`
+			New user joins the ${data.room} room!
+		`);
+	});
+
+	socket.on('msg',(data) => {
+		chatf.in(data.room).emit('msg',data.msg);
+	});
+
+	socket.on('disconnect',() => {
+		chatf.emit('msg','user diconnected');
+	});
+});
+
 
 // server listeing...........
 server.listen(PORT,() => {

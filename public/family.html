@@ -74,29 +74,22 @@
 			text-transform: capitalize;
 		}
 		#messages li:nth-child(odd) {
-			color:rgb(20, 241, 20);
-			background-color: rgb(255, 255, 255)
-		}
-		#messages li:nth-child(even) {
-
 			color:blue;
 			background-color: rgb(244, 244, 247)
+		}
+		#messages li:nth-child(even) {
+			color:rgb(20, 241, 20);
+			background-color: rgb(255, 255, 255)
 		}
 		.row{
 				margin: 10px auto;
 		}
 		.super{
 			display: flex;
-			justify-content: space-around;
+			justify-content: space-evenly;
 			align-items: center;
 			flex-wrap: wrap;
 			flex-direction: row;
-			width: 100%;
-			height: 500px;
-			background-image: url("./bg.jpg");
-			background-repeat: no-repeat;
-			background-position: center;
-			background-size: cover;
 		}
 		a:hover{
 			text-decoration: none;
@@ -117,18 +110,62 @@
 		<article class="container">
 			<div class="container-fluid">
 				<div class="jumbotron text-center mt-4 ">
-					<h1 class="message">CHAT BOX</h1>
+					<h1 class="message"></h1>
 					<hr>
-					<p class="sub"> Choose Your Chat Box Room</p>
+					<p id="main" class="sub"></p>
+					<p class="base"> Choose Your Chat Box</p>
 					<div class="super mt-4">
-							<a  href="/friends" class="" target="_blank">friends</a>
-							<a  href="/family" class=""  target="_blank">family</a>
+							<a  href="/friends"  target="_blank">friends</a>
+							<a  href="/family"  target="_blank">family</a>
 					</div>
+				</div>
+				<div class="row">
+					<ul id="messages">
+					</ul>
+				</div>
+				<div class="container-fluid">
+					<form action="">
+							<div class="input-group mb-3">
+									<input id="m" autocomplete="off" type="text" class="form-control" placeholder="type your message..." aria-label="Recipient's message" aria-describedby="button-addon2">
+									<div class="input-group-append">
+										<button class="btn btn-outline-secondary" type="submit" id="button-addon2">Send</button>
+									</div>
+								</div>
+					</form>
 				</div>
 			</div>
 		</article>
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			// family namespace
+			const room = "family";
+ 			const socket = io("/chatf");
+			socket.on("message",(data) => {
+				document.querySelector(".message")
+					.textContent = data.chat;
+				socket.on("welcome",(sub) => {
+					document.querySelector("#main").textContent = sub.data;
+				})
+			});
+			// family room chat section
+			socket.on("connect",() => {
+				// emitting to everybody in the family room
+				socket.emit("join",{ room });
+			});
+
+			$("form").submit(() => {
+				let msg = $("#m").val()
+				socket.emit("msg",{ msg, room });
+				$("#m").val("");
+				return false;
+			});
+
+			socket.on("msg",(data) => {
+				$("#messages").append($("<li>").text(data));
+			})
+		</script>
 </body>
 </html>
