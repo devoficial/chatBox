@@ -4,8 +4,8 @@
   "description": "a realtime chat service with socket.io",
   "main": "index.js",
   "scripts": {
-    "start": "DEBUG=* nodemon ./index.js --exec babel-node -e js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon ./index.js --exec babel-node -e js",
+    "test": "DEBUG=* nodemon ./index.js --exec babel-node -e js"
   },
   "author": "Debasis nath",
   "license": "ISC",
