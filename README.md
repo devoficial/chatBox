@@ -2,7 +2,7 @@
 
 - You can download node from "http://nodejs.org"
 
--- To get started clone the repo and run the following commands
+- To get started clone the repo and run the following commands
 
 ```bash
     npm i
