@@ -1,4 +1,4 @@
-# Chatbox is app made with javascript node.js express and sokcet.io for real time web chat.
+# Chatbox app is a real time web chat made with javascript node.js express and sokcet.io .
 
 - You can download node from "http://nodejs.org"
 - To get started with socket.io visit "https://socket.io"
